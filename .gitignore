@@ -1,0 +1,50 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments & Secrets — NEVER commit these
+.env
+.env.*
+.venv
+env/
+venv/
+ENV/
+
+# Database (local dev only)
+*.db
+*.sqlite3
+
+# Application storage (user data)
+uploads/
+signatures/
+keys/
+storage/
+
+# Python cache & test artifacts
+.pytest_cache/
+pip_output.txt
+
+# IDE
+.vscode/
+.idea/
+.cursor/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Node / Next.js
+node_modules/
+.next/
+frontend/.next/
+
+# Log files
+*.log
+
+# Project-specific — not needed on GitHub
+gemini.md
+implementation_plan.md
+sample_nda.txt
+sample_nda.txt.sig
+app.py
