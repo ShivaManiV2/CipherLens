@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from backend.api import auth, documents, ml, security
-from backend.config import APP_DESCRIPTION, APP_NAME, APP_VERSION
+from backend.config import APP_DESCRIPTION, APP_NAME, APP_VERSION, CORS_ORIGINS
 from backend.db.init_db import init_db
 
 # ─── Logging ──────────────────────────────────────────────
@@ -35,7 +35,7 @@ app = FastAPI(
 # ─── CORS Middleware ──────────────────────────────────────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # TODO: restrict in production
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

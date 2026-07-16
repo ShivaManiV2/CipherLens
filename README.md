@@ -13,7 +13,7 @@
 ## ✨ Key Features
 
 ### 🧠 Intelligent Document Categorization (AI)
-- Hybrid NLP classification engine powered by `facebook/bart-large-mnli` (via Hugging Face Inference API) combined with a domain-specific keyword signal layer.
+- Hybrid NLP classification engine powered by `typeform/distilbert-base-uncased-mnli` (via Hugging Face Inference API) combined with a domain-specific keyword signal layer.
 - Auto-classifies documents into categories: **NDA, Invoice, Contract, Medical Record, Legal Document, Financial Report, Job Resume**, and more — upon upload with no user input required.
 
 ### 🔐 Cryptographic Integrity & Signing
@@ -52,13 +52,15 @@
 | Layer | Technology |
 |---|---|
 | **Backend** | FastAPI, Uvicorn, Python 3.10+ |
-| **AI / NLP** | Hugging Face `transformers`, `facebook/bart-large-mnli`, `spaCy en_core_web_sm` |
+| **AI / NLP** | Hugging Face `transformers` (zero-shot classification), `spaCy en_core_web_sm` |
 | **OCR & Extraction** | PyMuPDF, pytesseract, python-docx |
 | **Cryptography** | `pycryptodome` (RSA-2048, AES-256-GCM, SHA-256) |
 | **Auth** | JWT (python-jose), Passlib (Bcrypt) |
 | **Database** | SQLite → PostgreSQL-ready (SQLAlchemy) |
 | **Frontend** | Next.js 15, React 19, Tailwind CSS |
 | **Storage** | Local filesystem → S3/MinIO-ready |
+
+📖 For a full breakdown of every dependency and *why* it was chosen, see **[TECH_STACK.md](TECH_STACK.md)**.
 
 ---
 
@@ -76,12 +78,11 @@ cd CipherLens
 ```
 
 ### 2. Configure environment variables
-Create a `.env` file in the root directory:
-```env
-MASTER_KEY=your-32-character-secret-key-here
-HF_TOKEN=hf_your_huggingface_token_here
-SECRET_KEY=your-jwt-secret-key
+Copy the example file and fill in real values:
+```bash
+cp .env.example .env
 ```
+See [.env.example](.env.example) for the full list of variables (JWT secret, AES master key, Hugging Face token, CORS origins, and Postgres credentials if using Docker Compose). Never commit your `.env` file.
 
 ### 3. Start the full stack
 ```powershell
@@ -137,8 +138,16 @@ CipherLens/
 - Private RSA keys are **AES-256-GCM encrypted at rest** — never stored in plaintext.
 - All API endpoints are protected by **JWT Bearer token** authentication.
 - Documents are stored with hashed filenames to prevent enumeration.
-- `MASTER_KEY` and `HF_TOKEN` must be provided via environment variables — never hardcoded.
+- `SECRET_KEY`, `MASTER_KEY`, `HF_TOKEN`, and database credentials must be provided via environment variables (see [.env.example](.env.example)) — never hardcoded or committed.
+- CORS is restricted to the origin(s) listed in `CORS_ORIGINS` (defaults to `http://localhost:3000` for local dev) rather than allowing all origins.
 
 ---
 
 *Built as part of a 12-week public build series exploring the intersection of Data Science & Cybersecurity.*
+
+---
+
+## 📚 More Docs
+
+- **[TECH_STACK.md](TECH_STACK.md)** — every technology in the stack, what it's used for, and why it was chosen.
+- **[FUTURE_IMPROVEMENTS.md](FUTURE_IMPROVEMENTS.md)** — known gaps, security items to fix before deploying, and roadmap ideas.

@@ -18,6 +18,14 @@ SECRET_KEY = os.getenv("SECRET_KEY", "cipherlens-dev-secret-CHANGE-IN-PRODUCTION
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 
+# ─── CORS ──────────────────────────────────────────────────
+# Comma-separated list of allowed frontend origins, e.g. "http://localhost:3000,https://app.example.com"
+CORS_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+    if origin.strip()
+]
+
 # ─── Encryption at Rest ───────────────────────────────────
 # AES-256 requires a 32-byte key. In dev, we use a fixed 32-byte string.
 # In production, this should be a strong securely generated key provided via env.

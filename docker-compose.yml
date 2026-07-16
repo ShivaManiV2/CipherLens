@@ -3,15 +3,15 @@ services:
     image: postgres:15-alpine
     container_name: cipherlens_db
     environment:
-      POSTGRES_USER: cipherlens
-      POSTGRES_PASSWORD: cipherlens_password
-      POSTGRES_DB: cipherlens
+      POSTGRES_USER: ${POSTGRES_USER:-cipherlens}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-cipherlens}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U cipherlens"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cipherlens}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -24,9 +24,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DATABASE_URL=postgresql://cipherlens:cipherlens_password@db:5432/cipherlens
-      - SECRET_KEY=cipherlens-prod-secret-918237198273
-      - MASTER_KEY=cipherlens-prod-master-key-32byt # 32 bytes
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-cipherlens}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}@db:5432/${POSTGRES_DB:-cipherlens}
+      - SECRET_KEY=${SECRET_KEY:?SECRET_KEY must be set in .env}
+      - MASTER_KEY=${MASTER_KEY:?MASTER_KEY must be set in .env} # 32 bytes
+      - HF_TOKEN=${HF_TOKEN:-}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000}
     volumes:
       - ./storage:/app/storage
     depends_on:
